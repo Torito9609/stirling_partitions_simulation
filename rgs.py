@@ -121,22 +121,45 @@ def rgs_exactly(n: int, k: int, *, yield_blocks: bool = False) -> Iterator[List[
     Genera las RGS (particiones de {1..n}) con exactamente k bloques (Algoritmo X).
     Si yield_blocks=True, devuelve la partición como lista de bloques (1-based).
     """
+    # Casos inválidos
     if not (0 <= k <= n):
         return
+
+    # Caso n = 0
     if n == 0:
         if k == 0:
+            # Por convenio, partición vacía
             yield [] if not yield_blocks else []
         return
 
+    # Caso trivial: k = 0 y n > 0 -> no hay particiones
+    if k == 0:
+        return
+
+    # Caso trivial: k = 1 -> todo en un solo bloque
+    if k == 1:
+        a = [0] * n  # RGS: todos con etiqueta 0
+        yield rgs_to_blocks(a) if yield_blocks else list(a)
+        return
+
+    # Caso trivial: k = n -> cada elemento en su propio bloque
+    if k == n:
+        a = list(range(n))  # RGS: [0,1,2,...,n-1]
+        yield rgs_to_blocks(a) if yield_blocks else list(a)
+        return
+
+    # Resto de casos (2 <= k <= n-1) -> usamos Algoritmo X
     a = [0] * n
     b = [0] * n
     _first_X(a, b, n, k)
 
     # Emitir estado inicial
     yield rgs_to_blocks(a) if yield_blocks else list(a)
+
     # Iterar
     while _next_X(a, b, n, k):
         yield rgs_to_blocks(a) if yield_blocks else list(a)
+
 
 
 # -------------------------------------------------------------

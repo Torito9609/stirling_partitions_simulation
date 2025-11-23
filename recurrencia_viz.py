@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 from typing import Optional, Dict, Tuple
+from matplotlib.lines import Line2D
 
 import matplotlib.pyplot as plt
+
 
 
 # ---------------------------------------------------
@@ -43,8 +45,6 @@ def es_caso_base(n: int, k: int) -> bool:
     if k < 0 or k > n:
         return True
     return False
-
-
 
 # ---------------------------------------------------
 # Estructura de nodo para el árbol de llamadas
@@ -200,27 +200,37 @@ def _draw_edges(ax, node: Optional[RecNode], max_step: Optional[int]):
     if node is None:
         return
 
-    for child in (node.left, node.right):
+    children = [("left", node.left), ("right", node.right)]
+
+    for side, child in children:
         if child is not None:
-            # Solo dibujar la arista si ambos nodos están dentro del paso de animación
+
+            # Solo dibujar si ambos nodos están dentro del paso de animación
             if max_step is None or (node.idx <= max_step and child.idx <= max_step):
-                # Flecha desde el padre (node) hacia el hijo (child)
+
+                # Colores según convención
+                if side == "left":
+                    arrow_color = "#8a2be2"   # morado oscuro
+                else:
+                    arrow_color = "#ffd700"   # amarillo
+
                 ax.annotate(
                     "",
                     xy=(child.x, child.y),
                     xytext=(node.x, node.y),
                     arrowprops=dict(
                         arrowstyle="->",
-                        color="white",
-                        lw=1.0,
-                        alpha=0.7,
-                        shrinkA=10,  # para que no toque el centro del nodo
+                        color=arrow_color,
+                        lw=1.2,
+                        alpha=0.9,
+                        shrinkA=10,
                         shrinkB=10,
                     ),
                     zorder=1,
                 )
 
             _draw_edges(ax, child, max_step)
+
 
 
 def _draw_nodes(ax, node: Optional[RecNode], max_step: Optional[int]):
@@ -230,7 +240,16 @@ def _draw_nodes(ax, node: Optional[RecNode], max_step: Optional[int]):
     # Respetar la animación: solo dibujar nodos hasta max_step
     if max_step is None or node.idx <= max_step:
         val = stirling_s2(node.n, node.k)
-        label = f"S({node.n},{node.k}) = {val}"
+        base = es_caso_base(node.n, node.k)
+
+# Etiqueta diferenciada:
+        if base:
+            # Los casos base sí muestran su valor
+            label = f"S({node.n},{node.k}) = {val}"
+        else:
+            # Los nodos internos NO muestran el resultado
+            label = f"S({node.n},{node.k})"
+
 
         # ¿Es caso base?
         base = es_caso_base(node.n, node.k)
@@ -350,6 +369,24 @@ def dibujar_arbol_recurrencia(n: int, k: int, step: Optional[int] = None):
         ax.set_ylim(min(ys) - margen_y, max(ys) + margen_y)
 
     ax.set_title(f"Árbol de recurrencia para S({n},{k})", color="white", fontsize=12)
+    
+    legend_elements = [
+    Line2D([0], [0], color="#8a2be2", lw=2, label="Flecha izquierda → k·S(n−1,k)"),
+    Line2D([0], [0], color="#ffd700", lw=2, label="Flecha derecha → S(n−1,k−1)")
+    ]
+
+    fig.legend(
+    handles=legend_elements,
+    loc="upper center",
+    bbox_to_anchor=(0.5, 1.02),   # más arriba del título, fuera del área del plot
+    ncol=2,
+    facecolor="black",
+    edgecolor="white",
+    labelcolor="white",
+    fontsize=8,
+    )
+
+
     
     plt.tight_layout()
 

@@ -106,15 +106,15 @@ Permite:
 
 - Seleccionar modo de enumeración:
 
-- - Todas las particiones de {1..n}
+  - Todas las particiones de {1..n}
 
-- - Exactamente k bloques
+  - Exactamente k bloques
 
 - Navegar entre particiones:
 
-- - ⬅️ Anterior
+  - ⬅️ Anterior
 
-- - ➡️ Siguiente
+  - ➡️ Siguiente
 
 - Activar Auto-play, que avanza automáticamente entre particiones a un ritmo configurable.
 
@@ -124,11 +124,11 @@ Cada partición se muestra con:
 
 - Representación geométrica:
 
-- - Puntos distribuidos sobre un círculo.
+  - Puntos distribuidos sobre un círculo.
 
-- - “Nubes” poligonales que encierran los elementos de un bloque.
+  - “Nubes” poligonales que encierran los elementos de un bloque.
 
-- - Colores distintos para cada bloque.
+  - Colores distintos para cada bloque.
 
 ### 2️⃣ Árbol de recurrencia de S(n,k)
 
@@ -166,9 +166,9 @@ La visualización incluye:
 
 Se implementan versiones adaptadas de los siguientes algoritmos lexicográficos optimizados del paper:
 
-Stamatelatos, G. & Efraimidis, P. S. (2021).
+_Stamatelatos, G. & Efraimidis, P. S. (2021).
 Lexicographic Enumeration of Set Partitions.
-arXiv: 2105.07472.
+arXiv: 2105.07472._
 
 Algoritmos incluidos:
 
@@ -182,6 +182,6 @@ Algoritmos incluidos:
 
 La implementación usa:
 
-$$S(0,0) = 1$$
-$$S(n,0) = 0 para n \geq 0$$
-$$S(n,n) = 1$$
+$S(0,0) = 1$
+$S(n,0) = 0$ para $n \geq 0$
+$S(n,n) = 1$

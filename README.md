@@ -133,7 +133,7 @@ Cada partición se muestra con:
 
   - Colores distintos para cada bloque.
   
-  <img width="844" height="500" alt="image" src="https://github.com/user-attachments/assets/500d2b33-bb14-452d-b9b5-5851e55351bd" />
+  <img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/500d2b33-bb14-452d-b9b5-5851e55351bd" />
 
 
 ### 2️⃣ Árbol de recurrencia de S(n,k)
@@ -163,6 +163,9 @@ La visualización incluye:
 - Flechas amarillas para el término $S(n−1,k−1)$
 
 - Una leyenda superior que explica esta convención.
+
+<img width="800" height="500" alt="image" src="https://github.com/user-attachments/assets/873c1ec7-69dd-4eac-887d-68931998cfed" />
+
 
 ---
 

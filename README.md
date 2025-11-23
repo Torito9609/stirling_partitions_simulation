@@ -13,6 +13,7 @@ Es ideal para cursos de _Matemáticas Discretas_, combinatoria o para explorar e
 
 ## 📂 Estructura del Proyecto
 
+.
 ├── app.py # Aplicación principal Streamlit (SPA)
 ├── rgs.py # Algoritmos RGS para generar particiones
 ├── viz.py # Visualización geométrica de particiones

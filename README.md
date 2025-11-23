@@ -21,7 +21,7 @@ Es ideal para cursos de _Matemáticas Discretas_, combinatoria o para explorar e
 ├── viz.py # Visualización geométrica de particiones
 ├── recurrencia_viz.py # Árbol de recurrencia de S(n,k)
 ├── requirements.txt # Dependencias del proyecto
-└── README.md # Este archivo
+└── README.md # Este archivo contiene el readme del proyecto
 ```
 
 ---

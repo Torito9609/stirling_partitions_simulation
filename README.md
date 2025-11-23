@@ -15,6 +15,7 @@ Es ideal para cursos de _Matemáticas Discretas_, combinatoria o para explorar e
 
 ```bash
 .
+├── CITATION.cff # Archivo para citar fuentes
 ├── app.py # Aplicación principal Streamlit (SPA)
 ├── rgs.py # Algoritmos RGS para generar particiones
 ├── viz.py # Visualización geométrica de particiones

@@ -26,7 +26,13 @@ def init_session_state():
     if "tree_n" not in st.session_state:
         st.session_state["tree_n"] = 4  
     if "tree_k" not in st.session_state:
-        st.session_state["tree_k"] = 2   
+        st.session_state["tree_k"] = 2  
+    if "tree_step" not in st.session_state:
+        st.session_state["tree_step"] = 0
+    
+    if "tree_anim_play" not in st.session_state:
+        st.session_state["tree_anim_play"] = False
+ 
 
 
 
@@ -157,8 +163,17 @@ def main():
                 st.session_state["tree_n"] = int(tree_n)
                 st.session_state["tree_k"] = int(tree_k)
 
-            # En esta vista no usamos autoplay
-            st.session_state["auto_play"] = False
+            st.markdown("### Animación del árbol")
+
+            # Estos valores se actualizarán después de dibujar (necesitas total_nodes)
+            # Por ahora, solo los botones:
+            col_t1, col_t2 = st.columns(2)
+            with col_t1:
+                if st.button("▶️ Play árbol"):
+                    st.session_state["tree_anim_play"] = True
+            with col_t2:
+                if st.button("⏸️ Pause árbol"):
+                    st.session_state["tree_anim_play"] = False
 
 
     # ---------------- Contenido principal ----------------
@@ -208,19 +223,39 @@ def main():
 
         n_tree = st.session_state["tree_n"]
         k_tree = st.session_state["tree_k"]
+        step = st.session_state["tree_step"]
 
-        st.write(f"Mostrando el árbol de recurrencia para S({n_tree}, {k_tree}).")
-
-        fig = recurrencia_viz.dibujar_arbol_recurrencia(n_tree, k_tree)
+        fig, total_nodes = recurrencia_viz.dibujar_arbol_recurrencia(n_tree, k_tree, step=step)
         st.pyplot(fig, use_container_width=False)
 
-        st.markdown(
-            """
-            Aquí luego vamos a:
-            - Dibujar el árbol de llamadas recursivas de S(n,k) = k·S(n−1,k) + S(n−1,k−1)
-            - Resaltar las ramas, casos base, etc.
-            """
+        st.write(f"Número total de nodos en el árbol: {total_nodes}")
+
+        # Slider para moverte manualmente por la animación
+        new_step = st.slider(
+            "Paso de animación (nodo máximo visible)",
+            min_value=0,
+            max_value=max(total_nodes - 1, 0),
+            value=step,
         )
+
+        if new_step != step:
+            st.session_state["tree_step"] = new_step
+        if st.session_state["tree_anim_play"]:
+            count = st_autorefresh(
+                interval=800,  # ms entre pasos, por ejemplo 0.8 s
+                limit=None,
+                key="tree_autoplay_counter",
+            )
+            # avanzamos un paso cada vez que cambia el contador
+            if st.session_state["tree_step"] < total_nodes - 1:
+                st.session_state["tree_step"] += 1
+            else:
+                st.session_state["tree_anim_play"] = False
+        else:
+            # si está pausado, no hacemos nada
+            pass
+
+
 
 
 if __name__ == "__main__":

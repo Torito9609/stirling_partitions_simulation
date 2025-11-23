@@ -132,6 +132,9 @@ Cada partición se muestra con:
   - “Nubes” poligonales que encierran los elementos de un bloque.
 
   - Colores distintos para cada bloque.
+  
+  <img width="844" height="500" alt="image" src="https://github.com/user-attachments/assets/500d2b33-bb14-452d-b9b5-5851e55351bd" />
+
 
 ### 2️⃣ Árbol de recurrencia de S(n,k)
 

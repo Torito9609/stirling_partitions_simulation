@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: >
+  Si utilizas este proyecto en trabajos académicos o investigación, 
+  por favor cita tanto este repositorio como la fuente original de los algoritmos RGS.
+authors:
+  - family-names: Toro Moreno
+    given-names: Kevin Andrés
+    orcid: ""
+    affiliation: "Universidad Nacional de Colombia"
+title: "Simulación de Particiones de Conjuntos y Árboles de Recurrencia S(n,k)"
+version: "1.0"
+date-released: "2025-11-23"
+repository-code: "https://github.com/Torito9609/stirling_partitions_simulation"
+
+preferred-citation:
+  type: software
+  title: "Simulación de Particiones de Conjuntos y Árboles de Recurrencia S(n,k)"
+  authors:
+    - family-names: Toro Moreno
+      given-names: Kevin Andrés
+  year: 2025
+  url: "https://github.com/Torito9609/stirling_partitions_simulation"
+
+references:
+  - type: article
+    authors:
+      - family-names: Stamatelatos
+        given-names: Giorgos
+      - family-names: Efraimidis
+        given-names: Pavlos S.
+    title: "Lexicographic Enumeration of Set Partitions"
+    year: 2021
+    journal: "arXiv preprint"
+    doi: "10.48550/arXiv.2105.07472"
+    url: "https://arxiv.org/abs/2105.07472"

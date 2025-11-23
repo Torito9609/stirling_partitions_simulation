@@ -5,6 +5,19 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import Polygon, Circle
 
+# -------------------------------------------------------------------
+# Visualización de particiones de {1..n}.
+#
+# Este módulo:
+#   - Coloca los elementos 1..n en posiciones fijas sobre un círculo
+#     (polígono regular).
+#   - Para cada bloque de la partición dibuja una "nube" poligonal que
+#     envuelve sus puntos (usando envolvente convexa o formas simples).
+#   - Dibuja los puntos y sus etiquetas numéricas sobre un fondo negro.
+#
+# Se usa desde app.py para mostrar la partición seleccionada.
+# -------------------------------------------------------------------
+
 
 # ---------------------------------------------------------
 # Posiciones base: puntos en círculo (polígono regular)
@@ -12,12 +25,22 @@ from matplotlib.patches import Polygon, Circle
 def generar_posiciones(n: int) -> Dict[int, Tuple[float, float]]:
     """
     Genera posiciones (x, y) para los elementos 1..n sobre un círculo unitario.
-    Devuelve un diccionario {elemento: (x, y)}.
+
+    Parámetros:
+        n : número de elementos del conjunto {1..n}.
+
+    Devuelve:
+        Diccionario {elemento: (x, y)} con coordenadas en R^2.
+
+    Idea:
+        Los puntos se distribuyen uniformemente en el ángulo, formando
+        un polígono regular inscrito en un círculo de radio 1.
     """
     posiciones: Dict[int, Tuple[float, float]] = {}
     if n <= 0:
         return posiciones
     if n == 1:
+        # Un solo elemento en el centro
         posiciones[1] = (0.0, 0.0)
         return posiciones
 
@@ -36,9 +59,19 @@ def generar_posiciones(n: int) -> Dict[int, Tuple[float, float]]:
 # ---------------------------------------------------------
 def _convex_hull(points: np.ndarray) -> np.ndarray:
     """
-    Devuelve la envolvente convexa de un conjunto de puntos 2D
-    usando el algoritmo de "monotone chain" (Andrew).
-    points: array de forma (m, 2)
+    Calcula la envolvente convexa de un conjunto de puntos 2D.
+
+    Implementa el algoritmo "monotone chain" (Andrew):
+      - Ordena los puntos por coordenada x (y por y como desempate).
+      - Construye la parte inferior (lower hull) y la parte superior
+        (upper hull) usando producto cruzado para decidir si se debe
+        eliminar el último punto.
+
+    Parámetros:
+        points : array de forma (m, 2) con m puntos en R^2.
+
+    Devuelve:
+        Array con los vértices de la envolvente convexa en orden.
     """
     if len(points) <= 1:
         return points
@@ -46,14 +79,14 @@ def _convex_hull(points: np.ndarray) -> np.ndarray:
     # Ordenar por x, luego por y
     pts = np.array(sorted(points.tolist()))
 
-    # Construir parte baja
+    # Construir parte baja (lower hull)
     lower = []
     for p in pts:
         while len(lower) >= 2:
             x1, y1 = lower[-2]
             x2, y2 = lower[-1]
             x3, y3 = p
-            # Producto cruzado para verificar giro
+            # Producto cruzado para verificar giro (<= 0 significa giro no convexo)
             cross = (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)
             if cross <= 0:
                 lower.pop()
@@ -61,7 +94,7 @@ def _convex_hull(points: np.ndarray) -> np.ndarray:
                 break
         lower.append(tuple(p))
 
-    # Construir parte alta
+    # Construir parte alta (upper hull)
     upper = []
     for p in reversed(pts):
         while len(upper) >= 2:
@@ -75,7 +108,7 @@ def _convex_hull(points: np.ndarray) -> np.ndarray:
                 break
         upper.append(tuple(p))
 
-    # Quitar el último de cada lista (está repetido)
+    # Quitar el último de cada lista (está repetido en la unión)
     hull = np.array(lower[:-1] + upper[:-1])
     return hull
 
@@ -83,32 +116,55 @@ def _convex_hull(points: np.ndarray) -> np.ndarray:
 # ---------------------------------------------------------
 # Dibujo de la partición con nubes poligonales
 # ---------------------------------------------------------
-def dibujar_particion(particion: List[List[int]], posiciones: Dict[int, Tuple[float, float]]):
+def dibujar_particion(
+    particion: List[List[int]],
+    posiciones: Dict[int, Tuple[float, float]],
+):
+    """
+    Dibuja una partición de {1..n} como:
+
+      - Puntos en las posiciones dadas por `posiciones`.
+      - Una "nube" (región coloreada) que envuelve los puntos
+        de cada bloque.
+
+    Parámetros:
+        particion : lista de bloques, cada bloque es una lista de enteros
+                    (por ejemplo [[1,4], [2,3,5], [6]]).
+        posiciones: diccionario {elemento: (x,y)} generado por generar_posiciones.
+
+    Devuelve:
+        fig : objeto Figure de matplotlib listo para mostrarse en Streamlit.
+    """
     # Canvas compacto + fondo negro
     fig, ax = plt.subplots(figsize=(5, 5))
-    
-    # Fondo del área de dibujo
+
+    # Fondo del área de dibujo y de la figura
     ax.set_facecolor("black")
     fig.patch.set_facecolor("black")
 
-    # Borde verde alrededor del canvas
-    # (usamos spine para que se vea siempre cuadrado)
-    
+    # Aquí podríamos personalizar un borde verde (spines), si se desea:
+    # for spine in ax.spines.values():
+    #     spine.set_edgecolor("green")
+    #     spine.set_linewidth(2.0)
 
     if not particion:
-        ax.text(0.5, 0.5, "Partición vacía", ha="center", va="center", fontsize=14, color="white")
+        # Partición vacía: mensaje simple
+        ax.text(
+            0.5, 0.5, "Partición vacía",
+            ha="center", va="center",
+            fontsize=14, color="white"
+        )
         ax.axis("off")
         return fig
 
     num_bloques = len(particion)
 
     for idx_bloque, bloque in enumerate(particion):
-
-        # Color único por bloque — modo HSV
+        # Color único por bloque — usamos el mapa de colores HSV
         color = plt.cm.hsv(idx_bloque / num_bloques)
 
-        xs = []
-        ys = []
+        xs: List[float] = []
+        ys: List[float] = []
         for elem in bloque:
             if elem in posiciones:
                 x, y = posiciones[elem]
@@ -116,12 +172,15 @@ def dibujar_particion(particion: List[List[int]], posiciones: Dict[int, Tuple[fl
                 ys.append(y)
 
         if not xs:
+            # Bloque vacío o elementos sin posición (no debería pasar)
             continue
 
+        # Puntos de este bloque como array (m,2)
         pts = np.column_stack((xs, ys))
 
-        # ===== NUBES =====
+        # ===== NUBES (regiones coloreadas alrededor del bloque) =====
         if len(pts) == 1:
+            # Un solo punto: lo rodeamos con un círculo ("burbuja")
             cx, cy = pts[0]
             burbuja = Circle(
                 (cx, cy), radius=0.20,
@@ -131,9 +190,11 @@ def dibujar_particion(particion: List[List[int]], posiciones: Dict[int, Tuple[fl
             ax.add_patch(burbuja)
 
         elif len(pts) == 2:
+            # Dos puntos: construimos un "cinturón" rectangular alrededor del segmento
             p1, p2 = pts
             vx, vy = p2 - p1
             norm = math.hypot(vx, vy) or 1.0
+            # Vector normal unitario para dar espesor
             nx, ny = -vy / norm, vx / norm
             ancho = 0.15
             poly_pts = np.array([
@@ -150,6 +211,7 @@ def dibujar_particion(particion: List[List[int]], posiciones: Dict[int, Tuple[fl
             ax.add_patch(burbuja)
 
         else:
+            # Tres o más puntos: usamos la envolvente convexa como "nube"
             hull = _convex_hull(pts)
             burbuja = Polygon(
                 hull, closed=True,
@@ -169,7 +231,7 @@ def dibujar_particion(particion: List[List[int]], posiciones: Dict[int, Tuple[fl
             zorder=2
         )
 
-        # Numeritos del bloque — ahora blancos
+        # Numeritos del bloque sobre cada punto
         for elem, (x, y) in zip(bloque, pts):
             ax.text(
                 x, y, str(elem),
@@ -179,6 +241,6 @@ def dibujar_particion(particion: List[List[int]], posiciones: Dict[int, Tuple[fl
                 zorder=3
             )
 
+    # Opcionalmente se podrían ajustar límites y ejes aquí,
+    # pero la app se encarga de encajarlo con use_container_width.
     return fig
-
-

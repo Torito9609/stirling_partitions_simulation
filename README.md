@@ -13,6 +13,7 @@ Es ideal para cursos de _Matemáticas Discretas_, combinatoria o para explorar e
 
 ## 📂 Estructura del Proyecto
 
+```bash
 .
 ├── app.py # Aplicación principal Streamlit (SPA)
 ├── rgs.py # Algoritmos RGS para generar particiones
@@ -20,6 +21,7 @@ Es ideal para cursos de _Matemáticas Discretas_, combinatoria o para explorar e
 ├── recurrencia_viz.py # Árbol de recurrencia de S(n,k)
 ├── requirements.txt # Dependencias del proyecto
 └── README.md # Este archivo
+```
 
 ---
 
@@ -182,6 +184,6 @@ Algoritmos incluidos:
 
 La implementación usa:
 
-$S(0,0) = 1$
-$S(n,0) = 0$ para $n \geq 0$
-$S(n,n) = 1$
+- $S(0,0) = 1$
+- $S(n,0) = 0$ para $n \geq 0$
+- $S(n,n) = 1$

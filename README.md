@@ -56,21 +56,21 @@ cd stirling_partitions_simulation
 python -m venv .venv
 ```
 
-Activarlo:
+### Activarlo:
 
-Windows
+#### Windows
 
 ```bash
 .venv\Scripts\activate
 ```
 
-Linux/macOS
+#### Linux/macOS
 
 ```bash
 source .venv/bin/activate
 ```
 
-Instalar dependencias
+### Instalar dependencias
 
 ```bash
 pip install -r requirements.txt
@@ -98,7 +98,7 @@ http://localhost:8501/
 
 La aplicación ofrece dos vistas principales seleccionables desde la barra lateral.
 
-# 1️⃣ Visualización de particiones
+### 1️⃣ Visualización de particiones
 
 Permite:
 
@@ -130,7 +130,7 @@ Cada partición se muestra con:
 
 - - Colores distintos para cada bloque.
 
-# 2️⃣ Árbol de recurrencia de S(n,k)
+### 2️⃣ Árbol de recurrencia de S(n,k)
 
 Permite visualizar la expansión recursiva del cálculo de los números de Stirling de segunda especie:
 
@@ -157,3 +157,31 @@ La visualización incluye:
 - Flechas amarillas para el término $S(n−1,k−1)$
 
 - Una leyenda superior que explica esta convención.
+
+---
+
+## 🧠 Contenido matemático
+
+### ✔️ Particiones y RGS
+
+Se implementan versiones adaptadas de los siguientes algoritmos lexicográficos optimizados del paper:
+
+Stamatelatos, G. & Efraimidis, P. S. (2021).
+Lexicographic Enumeration of Set Partitions.
+arXiv: 2105.07472.
+
+Algoritmos incluidos:
+
+- V – todas las particiones
+
+- X – particiones con exactamente k bloques
+
+- Y, Z – disponibles para posibles extensiones
+
+### ✔️ Recurrencia de Stirling II
+
+La implementación usa:
+
+$$S(0,0) = 1$$
+$$S(n,0) = 0 para n \geq 0$$
+$$S(n,n) = 1$$

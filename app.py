@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_autorefresh import st_autorefresh
 
 import rgs
 import viz
@@ -23,9 +24,9 @@ def init_session_state():
     if "last_auto_count" not in st.session_state:
         st.session_state["last_auto_count"] = 0 
     if "tree_n" not in st.session_state:
-        st.session_state["tree_n"] = 4   # por defecto
+        st.session_state["tree_n"] = 4  
     if "tree_k" not in st.session_state:
-        st.session_state["tree_k"] = 2   # por defecto
+        st.session_state["tree_k"] = 2   
 
 
 
@@ -110,9 +111,7 @@ def main():
                     retroceder()
             with col_b:
                 if st.button("Siguiente ➡️"):
-                    avanzar()
-                    
-            from streamlit_autorefresh import st_autorefresh  # pon este import al inicio del archivo también
+                    avanzar() 
 
             st.markdown("### Auto-play")
 
@@ -162,10 +161,6 @@ def main():
             st.session_state["auto_play"] = False
 
 
-    
-    
-
-
     # ---------------- Contenido principal ----------------
     if vista == "Visualización de particiones":
         st.title("Simulación de particiones de un conjunto")
@@ -194,8 +189,8 @@ def main():
 
             st.write(f"Índice actual: `{idx + 1}` de `{len(partitions)}`")
             st.write(f"Número de bloques: `{len(particion_actual)}`")
-            tamaños = [len(b) for b in particion_actual]
-            st.write(f"Tamaños de los bloques: `{tamaños}`")
+            tamanos = [len(b) for b in particion_actual]
+            st.write(f"Tamaños de los bloques: `{tamanos}`")
 
             st.markdown("#### Partición (como bloques)")
             # Ejemplo: {{1,4}, {2,3,5}, {6}}

@@ -32,8 +32,26 @@ El proyecto funciona en **Windows, Linux y macOS**.
 
 Requieres:
 
-- Python 3.9+
-- pip (gestor de paquetes)
+> [!CALLOUT] > **⚠️ Nota importante sobre compatibilidad al clonar el proyecto.**
+> Este proyecto utiliza Streamlit, NumPy, Matplotlib y herramientas adicionales que actualmente no son compatibles con Python ≥ 3.12 >debido a que algunas dependencias aún no han liberado builds para esa versión (por ejemplo, pyarrow, requerido indirectamente por >Streamlit).
+> Puede tener varios párrafos.
+
+### ✔ Si deseas clonar y ejecutar este proyecto localmente:
+
+Debes usar Python 3.9, 3.10 o 3.11.
+Python 3.12 no es compatible.
+
+#### Recomendación:
+
+```bash
+python --version
+```
+
+Si tu versión es ≥ 3.12, instala una versión compatible desde:
+
+🔗 https://www.python.org/downloads/
+
+Luego, solo sigue las instrucciones debajo
 
 > Se recomienda usar un entorno virtual (.venv), pero no es obligatorio.
 
@@ -132,9 +150,8 @@ Cada partición se muestra con:
   - “Nubes” poligonales que encierran los elementos de un bloque.
 
   - Colores distintos para cada bloque.
-  
-  <img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/500d2b33-bb14-452d-b9b5-5851e55351bd" />
 
+  <img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/500d2b33-bb14-452d-b9b5-5851e55351bd" />
 
 ### 2️⃣ Árbol de recurrencia de S(n,k)
 
@@ -165,7 +182,6 @@ La visualización incluye:
 - Una leyenda superior que explica esta convención.
 
 <img width="800" height="500" alt="image" src="https://github.com/user-attachments/assets/873c1ec7-69dd-4eac-887d-68931998cfed" />
-
 
 ---
 

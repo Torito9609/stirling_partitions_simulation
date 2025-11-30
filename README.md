@@ -39,7 +39,8 @@ El proyecto funciona en **Windows, Linux y macOS**.
 
 Requieres:
 
-> [!WARNING] > **Nota importante sobre compatibilidad al clonar el proyecto.**
+> [!WARNING]
+> **Nota importante sobre compatibilidad al clonar el proyecto.**
 >
 > Este proyecto utiliza Streamlit, NumPy, Matplotlib y herramientas adicionales que actualmente no son compatibles con Python 3.12 o mas actuales debido a que algunas dependencias aún no han liberado builds para esa versión (por ejemplo, pyarrow, requerido indirectamente
 > por Streamlit).

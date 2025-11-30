@@ -32,8 +32,8 @@ El proyecto funciona en **Windows, Linux y macOS**.
 
 Requieres:
 
-> [!WARNING]
-> ⚠️ Nota importante sobre compatibilidad al clonar el proyecto.
+> [!WARNING] 
+> **Nota importante sobre compatibilidad al clonar el proyecto.**
 >
 > Este proyecto utiliza Streamlit, NumPy, Matplotlib y herramientas adicionales que actualmente no son compatibles con Python 3.12 o mas actuales debido a que algunas dependencias aún no han liberado builds para esa versión (por ejemplo, pyarrow, requerido indirectamente
 > por Streamlit).
@@ -60,10 +60,10 @@ Luego, solo sigue las instrucciones debajo
 ---
 
 ## 🌐 Ejecutar la aplicación sin instalar nada (recomendado)
-
-Puedes usar la aplicación directamente en tu navegador sin instalar Python:
-
-https://stirlingpartitionssimulationgit-mwnvsqgjn3wipfbhbpvpbp.streamlit.app/
+>[!IMPORTANT]
+> Puedes usar la aplicación directamente en tu navegador sin instalar Python:
+>
+>https://stirlingpartitionssimulationgit-mwnvsqgjn3wipfbhbpvpbp.streamlit.app/
 
 ## 🛠️ Instalación
 

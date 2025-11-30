@@ -26,13 +26,20 @@ Es ideal para cursos de _Matemáticas Discretas_, combinatoria o para explorar e
 
 ---
 
+## 🌐 Ejecutar la aplicación sin instalar nada (recomendado)
+
+> [!IMPORTANT]
+> Puedes usar la aplicación directamente en tu navegador sin instalar Python:
+>
+> https://stirlingpartitionssimulationgit-mwnvsqgjn3wipfbhbpvpbp.streamlit.app/
+
 ## 🚀 Requisitos Previos
 
 El proyecto funciona en **Windows, Linux y macOS**.
 
 Requieres:
 
-> [!WARNING] 
+> [!WARNING]
 > **Nota importante sobre compatibilidad al clonar el proyecto.**
 >
 > Este proyecto utiliza Streamlit, NumPy, Matplotlib y herramientas adicionales que actualmente no son compatibles con Python 3.12 o mas actuales debido a que algunas dependencias aún no han liberado builds para esa versión (por ejemplo, pyarrow, requerido indirectamente
@@ -49,21 +56,14 @@ Python 3.12 no es compatible.
 python --version
 ```
 
-Si tu versión es ≥ 3.12, instala una versión compatible desde:
-
-🔗 https://www.python.org/downloads/
-
-Luego, solo sigue las instrucciones debajo
-
+> [!TIP]
+> Si tu versión es ≥ 3.12, instala una versión compatible desde:
+>
+> 🔗 https://www.python.org/downloads/
+> Luego, solo sigue las instrucciones debajo
 > Se recomienda usar un entorno virtual (.venv), pero no es obligatorio.
 
 ---
-
-## 🌐 Ejecutar la aplicación sin instalar nada (recomendado)
->[!IMPORTANT]
-> Puedes usar la aplicación directamente en tu navegador sin instalar Python:
->
->https://stirlingpartitionssimulationgit-mwnvsqgjn3wipfbhbpvpbp.streamlit.app/
 
 ## 🛠️ Instalación
 

@@ -119,6 +119,7 @@ def _convex_hull(points: np.ndarray) -> np.ndarray:
 def dibujar_particion(
     particion: List[List[int]],
     posiciones: Dict[int, Tuple[float, float]],
+    ax=None,
 ):
     """
     Dibuja una partición de {1..n} como:
@@ -135,8 +136,12 @@ def dibujar_particion(
     Devuelve:
         fig : objeto Figure de matplotlib listo para mostrarse en Streamlit.
     """
-    # Canvas compacto + fondo negro
-    fig, ax = plt.subplots(figsize=(5, 5))
+    own_axis = ax is None
+    if own_axis:
+        # Canvas compacto + fondo negro
+        fig, ax = plt.subplots(figsize=(5, 5))
+    else:
+        fig = ax.figure
 
     # Fondo del área de dibujo y de la figura
     ax.set_facecolor("black")
@@ -243,4 +248,65 @@ def dibujar_particion(
 
     # Opcionalmente se podrían ajustar límites y ejes aquí,
     # pero la app se encarga de encajarlo con use_container_width.
+    if own_axis:
+        ax.set_xlim(-1.3, 1.3)
+        ax.set_ylim(-1.3, 1.3)
+        ax.axis("off")
+    return fig
+
+
+def dibujar_particiones_en_grid(
+    particiones: List[List[List[int]]],
+    n: int | None = None,
+    max_cols: int = 3,
+    figsize_unit: float = 3.3,
+):
+    """Dibuja una lista de particiones en una rejilla de subplots.
+
+    Parámetros:
+        particiones: lista con todas las particiones (cada una es lista de bloques).
+        n          : tamaño del conjunto {1..n}. Si es None se infiere del máximo
+                     elemento encontrado en las particiones.
+        max_cols   : número máximo de columnas en la rejilla.
+        figsize_unit: tamaño base (en pulgadas) usado para calcular figsize
+                      dinámico.
+
+    Devuelve:
+        fig : objeto Figure con todos los subplots dibujados.
+    """
+    if not particiones:
+        fig, ax = plt.subplots(figsize=(4, 3))
+        ax.text(0.5, 0.5, "No hay particiones para mostrar", ha="center", va="center")
+        ax.axis("off")
+        return fig
+
+    if n is None:
+        n = max(max(bloque) for particion in particiones for bloque in particion)
+
+    posiciones = generar_posiciones(n)
+    total = len(particiones)
+    cols = max(1, min(max_cols, total))
+    rows = math.ceil(total / cols)
+
+    fig, axes = plt.subplots(
+        rows,
+        cols,
+        figsize=(cols * figsize_unit, rows * figsize_unit),
+    )
+    fig.patch.set_facecolor("black")
+    axes_flat = np.atleast_1d(axes).flatten()
+
+    for ax in axes_flat:
+        ax.set_xlim(-1.3, 1.3)
+        ax.set_ylim(-1.3, 1.3)
+        ax.axis("off")
+
+    for particion, ax in zip(particiones, axes_flat):
+        dibujar_particion(particion, posiciones, ax=ax)
+
+    # Desactivar ejes sobrantes si la rejilla tiene más espacios que particiones
+    for ax in axes_flat[total:]:
+        ax.axis("off")
+
+    fig.tight_layout()
     return fig

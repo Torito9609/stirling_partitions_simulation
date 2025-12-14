@@ -37,6 +37,9 @@ def init_session_state():
     if "partitions" not in st.session_state:
         # Lista de particiones actuales (cada partición es lista de bloques).
         st.session_state["partitions"] = []
+    if "partition_mode" not in st.session_state:
+        # Modo de enumeración usado en la última generación ("all" / "exact").
+        st.session_state["partition_mode"] = None
     if "current_index" not in st.session_state:
         # Índice de la partición actualmente mostrada.
         st.session_state["current_index"] = 0
@@ -216,6 +219,7 @@ def main():
         partitions = st.session_state["partitions"]
         n_actual = st.session_state["current_n"]
         k_actual = st.session_state["current_k"]
+        modo_generado = st.session_state["partition_mode"]
 
         st.subheader("Particiones generadas")
         st.write(f"Total de particiones: `{len(partitions)}`")

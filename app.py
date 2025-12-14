@@ -94,7 +94,6 @@ def generar_particiones(n: int, modo: str, k: int | None = None):
         partes = []
 
     st.session_state["partitions"] = partes
-    st.session_state["current_index"] = 0
     st.session_state["current_n"] = n
     st.session_state["current_k"] = k
 

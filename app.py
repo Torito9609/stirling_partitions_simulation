@@ -32,7 +32,6 @@ def init_session_state():
       - Guardar la lista de particiones generadas.
       - Recordar el índice actual de la partición mostrada.
       - Guardar parámetros n, k de la enumeración.
-      - Controlar el auto-play de particiones.
       - Controlar los parámetros y animación del árbol de recurrencia.
     """
     if "partitions" not in st.session_state:
@@ -47,13 +46,6 @@ def init_session_state():
     if "current_k" not in st.session_state:
         # Valor de k (si aplica) usado para generar las particiones.
         st.session_state["current_k"] = None
-    if "auto_play" not in st.session_state:
-        # Bandera para saber si el auto-play de particiones está activo.
-        st.session_state["auto_play"] = False
-    if "last_auto_count" not in st.session_state:
-        # Último valor del contador de st_autorefresh (para detectar cambios).
-        st.session_state["last_auto_count"] = 0
-
     # Parámetros por defecto para el árbol de recurrencia S(n, k)
     if "tree_n" not in st.session_state:
         st.session_state["tree_n"] = 4
@@ -147,8 +139,6 @@ def main():
             index=0,
         )
 
-        intervalo = None  # se usará solo en la vista de particiones
-
         if vista == "Visualización de particiones":
 
             # Parámetro n para el conjunto {1..n}
@@ -197,48 +187,6 @@ def main():
             with col_b:
                 if st.button("Siguiente ➡️"):
                     avanzar()
-
-            st.markdown("### Auto-play")
-
-            # Intervalo entre pasos del auto-play (en segundos)
-            intervalo = st.slider(
-                "Intervalo (segundos)", 0.5, 5.0, 1.5, 0.1
-            )
-
-            col_auto1, col_auto2 = st.columns(2)
-            with col_auto1:
-                if st.button("▶️ Iniciar auto-play"):
-                    st.session_state["auto_play"] = True
-            with col_auto2:
-                if st.button("⏸️ Pausar auto-play"):
-                    st.session_state["auto_play"] = False
-
-            # -----------------------------------
-            # AUTO-PLAY con st_autorefresh
-            # -----------------------------------
-            if st.session_state["auto_play"]:
-                # Dispara un rerun cada `intervalo` segundos
-                count = st_autorefresh(
-                    interval=int(intervalo * 1000),  # milisegundos
-                    limit=None,
-                    key="autoplay_counter",
-                )
-
-                # Si el contador cambió, avanzamos una partición
-                if count != st.session_state["last_auto_count"]:
-                    st.session_state["last_auto_count"] = count
-
-                    if (
-                        st.session_state["current_index"]
-                        < len(st.session_state["partitions"]) - 1
-                    ):
-                        st.session_state["current_index"] += 1
-                    else:
-                        # Si llegamos al final, detenemos el auto-play
-                        st.session_state["auto_play"] = False
-            else:
-                # Si el auto-play está apagado, reseteamos el contador
-                st.session_state["last_auto_count"] = 0
 
         else:
             # Controles de la vista del árbol de recurrencia

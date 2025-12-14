@@ -88,11 +88,13 @@ def generar_particiones(n: int, modo: str, k: int | None = None):
     """
     if modo == "Todas las particiones de {1..n}":
         partes = list(rgs.rgs_all(n, yield_blocks=True))
+        partes.sort(key=len)
     elif modo == "Exactamente k bloques":
         if k is None:
             partes = []
         else:
             partes = list(rgs.rgs_exactly(n, k, yield_blocks=True))
+            partes.sort(key=len)
     else:
         partes = []
 

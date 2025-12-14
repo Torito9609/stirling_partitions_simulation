@@ -97,7 +97,6 @@ def generar_particiones(n: int, modo: str, k: int | None = None):
     st.session_state["current_index"] = 0
     st.session_state["current_n"] = n
     st.session_state["current_k"] = k
-    st.session_state["partition_mode"] = "exact" if modo == "Exactamente k bloques" else "all"
 
 
 # ------------------------------------------
@@ -160,6 +159,21 @@ def main():
             if st.button("Generar particiones"):
                 generar_particiones(int(n), modo, int(k) if k is not None else None)
 
+            st.markdown("### Visualización completa")
+            st.session_state.setdefault("ver_todas", False)
+            ver_todas = st.toggle(
+                "Mostrar todas las particiones en rejilla", value=False, help="Dibuja todas las particiones en subplots (recomendado solo para n pequeños)."
+            )
+
+            st.markdown("### Navegación")
+            col_a, col_b = st.columns(2)
+            with col_a:
+                if st.button("⬅️ Anterior"):
+                    retroceder()
+            with col_b:
+                if st.button("Siguiente ➡️"):
+                    avanzar()
+
         else:
             # Controles de la vista del árbol de recurrencia
             st.markdown("### Parámetros de S(n, k)")
@@ -207,14 +221,6 @@ def main():
         k_actual = st.session_state["current_k"]
         modo_generado = st.session_state["partition_mode"]
 
-        # Evita mostrar un conjunto de particiones que no coincide con el modo actual del sidebar.
-        if modo_generado == "exact" and modo != "Exactamente k bloques":
-            st.info("Genera nuevamente para ver todas las particiones de {1..n}.")
-            return
-        if modo_generado == "all" and modo == "Exactamente k bloques":
-            st.info("Genera nuevamente para ver solo las particiones con k bloques.")
-            return
-
         st.subheader("Particiones generadas")
         st.write(f"Total de particiones: `{len(partitions)}`")
         if k_actual is not None:
@@ -238,7 +244,28 @@ def main():
                 data=buffer.getvalue(),
                 file_name=f"particiones_n{n_actual}.png",
                 mime="image/png",
-                key=f"download_grid_{modo_generado}_{n_actual}_{k_actual}",
+            )
+
+        st.markdown("---")
+        st.subheader("Todas las particiones")
+        limite_n = 7
+        if not ver_todas:
+            st.info("Activa el toggle en la barra lateral para mostrar todas las particiones en subplots.")
+        elif n_actual is not None and n_actual > limite_n:
+            st.warning(
+                f"n = {n_actual} genera {len(partitions)} particiones. Reduce n (≤ {limite_n}) para evitar la explosión combinatoria al dibujarlas."
+            )
+        else:
+            grid_fig = viz.dibujar_particiones_en_grid(partitions, n=n_actual)
+            st.pyplot(grid_fig, use_container_width=True)
+
+            buffer = io.BytesIO()
+            grid_fig.savefig(buffer, format="png", bbox_inches="tight", facecolor=grid_fig.get_facecolor())
+            st.download_button(
+                "Descargar figura de subplots",
+                data=buffer.getvalue(),
+                file_name=f"particiones_n{n_actual}.png",
+                mime="image/png",
             )
 
     else:

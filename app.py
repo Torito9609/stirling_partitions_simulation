@@ -97,23 +97,6 @@ def generar_particiones(n: int, modo: str, k: int | None = None):
 
 
 # ------------------------------------------
-# Navegación entre particiones
-# ------------------------------------------
-def avanzar():
-    """Avanza al siguiente índice de partición (si existe)."""
-    if st.session_state["partitions"]:
-        if st.session_state["current_index"] < len(st.session_state["partitions"]) - 1:
-            st.session_state["current_index"] += 1
-
-
-def retroceder():
-    """Retrocede al índice anterior de partición (si existe)."""
-    if st.session_state["partitions"]:
-        if st.session_state["current_index"] > 0:
-            st.session_state["current_index"] -= 1
-
-
-# ------------------------------------------
 # App principal
 # ------------------------------------------
 def main():
@@ -231,46 +214,33 @@ def main():
             return
 
         partitions = st.session_state["partitions"]
-        idx = st.session_state["current_index"]
         n_actual = st.session_state["current_n"]
         k_actual = st.session_state["current_k"]
 
-        # Partición actual como lista de bloques, por ejemplo: [[1,4], [2,3,5], [6]]
-        particion_actual = partitions[idx]
+        st.subheader("Particiones generadas")
+        st.write(f"Total de particiones: `{len(partitions)}`")
+        if k_actual is not None:
+            st.write(f"Modo: particiones con exactamente `{k_actual}` bloques")
+        else:
+            st.write("Modo: todas las particiones de {1..n}")
 
-        # Información textual (izquierda) y figura (derecha)
-        col_info, col_fig = st.columns([1, 2])
-
-        with col_info:
-            st.subheader("Información de la partición")
-            st.write(f"n actual: `{n_actual}`")
-            if k_actual is not None:
-                st.write(f"Modo: particiones con exactamente `{k_actual}` bloques")
-            else:
-                st.write("Modo: todas las particiones de {1..n}")
-
-            st.write(f"Índice actual: `{idx + 1}` de `{len(partitions)}`")
-            st.write(f"Número de bloques: `{len(particion_actual)}`")
-            tamanos = [len(b) for b in particion_actual]
-            st.write(f"Tamaños de los bloques: `{tamanos}`")
-
-            st.markdown("#### Partición (como bloques)")
-            # Ejemplo visual: { {1,4}, {2,3,5}, {6} }
-            bloques_str = (
-                "{ "
-                + ", ".join(
-                    "{" + ", ".join(map(str, b)) + "}" for b in particion_actual
-                )
-                + " }"
+        limite_n = 7
+        if n_actual is not None and n_actual > limite_n:
+            st.warning(
+                f"n = {n_actual} genera {len(partitions)} particiones. Reduce n (≤ {limite_n}) para evitar la explosión combinatoria al dibujarlas."
             )
-            st.code(bloques_str, language="text")
+        else:
+            grid_fig = viz.dibujar_particiones_en_grid(partitions, n=n_actual)
+            st.pyplot(grid_fig, use_container_width=True)
 
-        with col_fig:
-            st.subheader("Visualización")
-            # Generar posiciones para los puntos y dibujar la partición
-            posiciones = viz.generar_posiciones(n_actual)
-            fig = viz.dibujar_particion(particion_actual, posiciones)
-            st.pyplot(fig, use_container_width=True)
+            buffer = io.BytesIO()
+            grid_fig.savefig(buffer, format="png", bbox_inches="tight", facecolor=grid_fig.get_facecolor())
+            st.download_button(
+                "Descargar figura de subplots",
+                data=buffer.getvalue(),
+                file_name=f"particiones_n{n_actual}.png",
+                mime="image/png",
+            )
 
         st.markdown("---")
         st.subheader("Todas las particiones")

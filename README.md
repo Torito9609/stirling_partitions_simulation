@@ -31,7 +31,7 @@ Es ideal para cursos de _Matemáticas Discretas_, combinatoria o para explorar e
 > [!IMPORTANT]
 > Puedes usar la aplicación directamente en tu navegador sin instalar Python:
 >
-> https://stirlingpartitionssimulationgit-mwnvsqgjn3wipfbhbpvpbp.streamlit.app/
+> https://stirlingpartitionssimulation-yu6mp2d4lxc75epbdqbfpg.streamlit.app/
 
 ## 🚀 Requisitos Previos (Solo si quieres clonar o descargar)
 
